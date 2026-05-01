@@ -1,6 +1,8 @@
+"""Database module for the Copy-Cat Creater app."""
 import sqlite3
 from scraper import scrape_restaurant
 
+# Function to create the database and the restaurant_foods table
 def create_database():
     """Creates the database"""
     with sqlite3.connect('foods.db') as conn:
@@ -19,7 +21,8 @@ def create_database():
         ''')
     conn.commit()
 
-def load_databse(foods):
+# Function to load the data into the database
+def load_database(foods):
     """Loads the data into the databse"""
     with sqlite3.connect('foods.db') as conn:
         c = conn.cursor()
@@ -33,6 +36,7 @@ def load_databse(foods):
 
     conn.commit()
 
+# Function to filter the foods by restaurant, calories, and category and return a list of foods
 def filter_foods(restaurant=None, calories=None, category=None): 
     """Filters the foods by restaurant, calories, and category and returns a list of foods"""
     with sqlite3.connect('foods.db') as conn:
@@ -44,6 +48,7 @@ def filter_foods(restaurant=None, calories=None, category=None):
         """
         params = []
 
+        # Add conditions to the query based on the provided filters
         if restaurant:
             query += " AND food_restaurant = ?"
             params.append(restaurant)
@@ -61,6 +66,7 @@ def filter_foods(restaurant=None, calories=None, category=None):
         rows = c.fetchall() 
         filter_foods = []
 
+        # Loop through the rows and create a list of foods based on the query results
         for row in rows:
                 food_name, food_calories, food_restaurant, food_logo, food_category, food_link, food_image = row
 
@@ -76,6 +82,7 @@ def filter_foods(restaurant=None, calories=None, category=None):
 
     return filter_foods
 
+# Function to get the list of food categories
 def get_food_categories():
     """Get list of food categories"""
     with sqlite3.connect('foods.db') as conn:
@@ -89,6 +96,7 @@ def get_food_categories():
         categories.append(row[0])
     return categories
 
+# Function to get the list of food restaurants
 def get_food_restaurant():
     """Get list of food restaurant"""
     with sqlite3.connect('foods.db') as conn:
@@ -102,6 +110,7 @@ def get_food_restaurant():
         restaurant.append(row[0])
     return restaurant
 
+# Function to get the list of categories by restaurant
 def get_categories_by_restaurant(restaurant):
     """Get list of categpries by food restaurant"""
     with sqlite3.connect('foods.db') as conn:
@@ -116,3 +125,13 @@ def get_categories_by_restaurant(restaurant):
     for row in rows:
         restaurant.append(row[0])
     return restaurant
+
+def delete_by_id(food_id):
+    try:
+        with sqlite3.connect('foods.db') as conn:
+            c = conn.cursor()
+            c.execute('DELETE FROM restaurant_foods WHERE id = ?',
+                    (food_id, ))
+            conn.commit()
+    except sqlite3.Error as e:
+        return

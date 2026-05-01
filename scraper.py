@@ -1,7 +1,9 @@
+"""This module contains the functions to scrape the menu from the provided URL and return the scraped data"""
 import requests
 from bs4 import BeautifulSoup
 import re
 
+# Function to scrape the menu from the provided URL and return the scraped data
 def scrape_restaurant(html):
     """Scrapes the menu from the provided URL and returns the scraped data"""
     r = requests.get(f'{html}', auth=('user', 'pass'))
@@ -33,6 +35,7 @@ def scrape_restaurant(html):
 
     return restaurant_foods
 
+# Function to scrape the food image from the provided URL and return the scraped image URL
 def scrape_food_image(html):
     """Scrapes the food items picture"""
     r = requests.get(f'{html}', auth=('user', 'pass'))

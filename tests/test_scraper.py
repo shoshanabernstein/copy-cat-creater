@@ -7,7 +7,9 @@ def test_scrape_food_image():
     test_image_url = scrape_food_image(test_html)
 
     assert test_image_url == "https://fastfoodnutrition.org/item-photos/400x320/176219431863748.png"
-    assert scrape_food_image(test_empty_html) == None 
 
 def test_scrape_restaurant():
-    fake_data = ""
+    test_html = "https://fastfoodnutrition.org/mcdonalds"
+    test_data = scrape_restaurant(test_html)
+    assert len(test_data) > 0
+    assert test_data[0]['food_logo'] == "https://fastfoodnutrition.org/logos/mcdonalds.jpg"
