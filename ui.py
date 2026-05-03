@@ -9,7 +9,7 @@ st.set_page_config(
         
     )
 
-st.title("_Copy-Cat_ :red[Creater]", text_alignment="center")
+st.title("_Copy-Cat_ Recipe :red[Creator]", text_alignment="center")
 filtered_foods = app.sidebar()
 
 app.tab_card(filtered_foods)

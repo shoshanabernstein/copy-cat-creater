@@ -65,7 +65,7 @@ def food_card(food):
             col1, col2 = st.columns([2, 2])
             with col1:
                 # Context for ai generation
-                st.subheader("_Create a_  :red[CopyCat]:", width='content')
+                st.subheader("_Create a_  :red[Copy-Cat]:", width='content')
                 context = st.text_input("Specifications (optional):", key=f"spec_{food['id']}")
                 st.space()
                 # Button to generate the recipe using Azure OpenAI
