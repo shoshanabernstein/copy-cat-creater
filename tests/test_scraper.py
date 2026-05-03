@@ -8,13 +8,6 @@ def test_scrape_food_image():
 
     assert test_image_url == "https://fastfoodnutrition.org/item-photos/400x320/176219431863748.png"
 
-def test_scrape_restaurant():
-    test_html = "https://fastfoodnutrition.org/mcdonalds"
-    test_data = scrape_restaurant(test_html)
-    assert len(test_data) > 0
-    assert test_data[0]['food_logo'] == "https://fastfoodnutrition.org/logos/mcdonalds.jpg"
-
-
 @patch("scraper.requests.get")
 def test_scrape_restaurant(mock_get):
     mock_get.return_value.status_code = 200
@@ -28,3 +21,10 @@ def test_scrape_restaurant(mock_get):
     result = scrape_restaurant("fake_url")
 
     assert result is not None
+
+@patch("scraper.requests.get")
+def test_scraper_missing_image(mock_get):
+    mock_get.return_value.text = "<html></html>"
+    
+    result = scrape_food_image("https://fakeurl.com/item")
+    assert result is None
