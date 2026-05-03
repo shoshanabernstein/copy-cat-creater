@@ -2,6 +2,8 @@
 import sqlite3
 from scraper import scrape_restaurant
 
+def get_connection(db_path="food.db"):
+    return sqlite3.connect(db_path)
 # Function to create the database and the restaurant_foods table
 def create_database():
     """Creates the database"""
@@ -84,8 +86,10 @@ def filter_foods(restaurant=None, calories=None, category=None):
     return filter_foods
 
 # Function to get the list of food categories
-def get_food_categories():
+def get_food_categories(conn=None):
     """Get list of food categories"""
+    if conn is None:
+        conn = get_connection()
     with sqlite3.connect('foods.db') as conn:
         c = conn.cursor()
         c.execute('''SELECT food_category FROM restaurant_foods GROUP BY food_category''')

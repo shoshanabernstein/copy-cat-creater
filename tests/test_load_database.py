@@ -14,8 +14,9 @@ def test_load_database(in_memory_db):
 
         assert len(results) == len(Test_Food_Data)
 
-def test_load_database_runs():
+def test_load_database_runs(in_memory_db):
     try:
-        load_database(Test_Food_Data)
+        with patch('sqlite3.connect', return_value=in_memory_db):
+            load_database(Test_Food_Data)
     except Exception:
         assert False, "load_database crashed"

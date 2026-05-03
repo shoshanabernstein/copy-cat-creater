@@ -82,19 +82,6 @@ def test_get_categories_by_restaurant(in_memory_db):
         assert results[0] == "Burgers & Sandwiches"
 
 
-
-
-    # for food in Test_Food_Data:
-    #     c.execute('''
-    #           INSERT INTO restaurant_foods (food_name, food_restaurant, food_calories)
-    #           VALUES (?, ?, ?)
-    #           ''', (food['food_name'], food['food_restaurant'], food['food_calories']))
-    # in_memory_db.commit()
-
-    # results = get_food_categories()
-
-    # assert len(results) == len(Test_Food_Data)
-
 def test_get_food_categories(in_memory_db):
     with patch('sqlite3.connect', return_value=in_memory_db):
 

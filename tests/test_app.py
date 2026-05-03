@@ -2,6 +2,7 @@ from app import food_card
 
 def test_food_card():
     food = {
+        "id": 5,
         "food_name": "Burger", 
         "food_calories": 500, 
         "food_restaurant": "McDonald's",
