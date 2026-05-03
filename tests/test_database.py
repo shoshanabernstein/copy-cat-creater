@@ -1,4 +1,4 @@
-from database import (create_database, load_databse, get_categories_by_restaurant, 
+from database import ( get_categories_by_restaurant, 
                       get_food_categories, get_food_restaurant, filter_foods)
 import sqlite3
 import pytest

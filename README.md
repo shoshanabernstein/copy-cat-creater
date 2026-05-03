@@ -1,4 +1,4 @@
-# 🍔 Copy-Cat Creater
+# 🍔 Copy-Cat Creater - [Click here to try!](https://copy-cat-creater.streamlit.app/)
 
 ![Python](https://img.shields.io/badge/python-3.12-blue.svg)
 ![Streamlit](https://img.shields.io/badge/streamlit-v1.44-red.svg)
