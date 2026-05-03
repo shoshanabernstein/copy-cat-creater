@@ -37,7 +37,7 @@ def load_database(foods):
     conn.commit()
 
 # Function to filter the foods by restaurant, calories, and category and return a list of foods
-def filter_foods(restaurant=None, calories=0, category=None): 
+def filter_foods(restaurant=None, calories=None, category=None): 
     """Filters the foods by restaurant, calories, and category and returns a list of foods"""
     with sqlite3.connect('foods.db') as conn:
         c = conn.cursor()
@@ -53,7 +53,7 @@ def filter_foods(restaurant=None, calories=0, category=None):
             query += " AND food_restaurant = ?"
             params.append(restaurant)
         
-        if calories:
+        if calories is not None:
             query += " AND food_calories <= ?"
             params.append(calories)
 
