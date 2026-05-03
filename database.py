@@ -131,7 +131,9 @@ def get_categories_by_restaurant(restaurant):
         restaurant.append(row[0])
     return restaurant
 
+# Function to delete a food from the database by its id
 def delete_by_id(food_id):
+    """Deletes a food from the database by its id"""
     try:
         with sqlite3.connect('foods.db') as conn:
             c = conn.cursor()

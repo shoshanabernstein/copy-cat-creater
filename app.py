@@ -49,37 +49,45 @@ def chart(filtered_foods):
 # Function to create a card for each food item
 def food_card(food):
     """Function to create a card for each food item"""
+    # Create a popover for each food item that displays the food name and an image of the restaurant logo, and when clicked, it expands to show more details about the food item, including the name, restaurant, category, calories, and a link to the nutrition information. It also includes a button to generate a copycat recipe using Azure OpenAI, which when clicked, displays the generated recipe in a new popover.
     with st.popover(f":material/fork_spoon: {food['food_name']}", width='content', type='tertiary'):
-        with st.container(width=700):
+        with st.container(width=600):
             header_col, logo_col = st.columns([3, 1])
             with logo_col:
-                st.image(food['food_logo'], width=60, use_container_width=True)  
-                st.link_button("View Nutrition", food['food_link'], use_container_width=True, icon=":material/nutrition:", type='primary')
+                st.image(food['food_logo'], width='content',)  
 
             with header_col:
-                st.title(food['food_name'])
+                st.title(food['food_name'], width='content')
                 st.caption(f"{food['food_restaurant']} | {food['food_category']}")      
                 st.badge(f"Calories {food['food_calories']}", width='content', color='gray', icon=f":material/bolt: ")
+                
+            st.divider()
+            col1, col2 = st.columns([2, 2])
+            with col1:
+                # Context for ai generation
+                st.subheader("_Create a_  :red[CopyCat]:", width='content')
+                context = st.text_input("Specifications (optional):", key=f"spec_{food['id']}")
+                st.space()
+                # Button to generate the recipe using Azure OpenAI
+                if st.button(f"Generate **{food['food_name']}** Recipe", type="primary", use_container_width=True, key=food['id']):
+                    with st.spinner("Analyzing Ingredients..."):
+                        recipe = recreate_recipe_ai_bot(food, context)
+                        st.space()
+                        with st.popover(f"{food['food_name']} Recipe"):
+                            st.markdown(recipe)
+            with col2:
+                left_col, cent_col, right_col = st.columns([.5, 2, .5])
 
-                col1, col2 = st.columns([2, 3])
-                with col1:
-                    st.space()
-                    # Context for ai generation
-                    context = st.text_input("Specifications (optional)", key=f"spec_{food['id']}")
-                    st.space()
-                    # Button to generate the recipe using Azure OpenAI
-                    if st.button(f"Generate {food['food_name']} Recipe", type="primary", use_container_width=True):
-                        with st.spinner("Analyzing Ingredients..."):
-                            recipe = recreate_recipe_ai_bot(food, context)
-                            st.space()
-                            with st.popover(f"{food['food_name']} Recipe"):
-                                st.markdown(recipe)
-                with col2:
+                with cent_col:  
+                    # Display the food image if it exists, otherwise display a placeholder image 
                     food_image_url = food['food_image']
+                    st.link_button("View Nutrition", food['food_link'], use_container_width=True, icon=":material/nutrition:", type='primary')
                     if food_image_url:
-                        st.image(food['food_image'], use_container_width=True, caption=f"{food['food_name']}", width=50)
+                        st.image(food['food_image'], use_container_width=True, caption=f"{food['food_name']}", width='content', link=f"{food['food_link']}")
+                    elif food_image_url == food['food_logo']:
+                        st.image("https://worldfoodtour.co.uk/wp-content/uploads/2013/06/neptune-placeholder-48.jpg", caption=f"{food['food_name']}", link=f"{food['food_link']}")
                     else:
-                        st.image("https://worldfoodtour.co.uk/wp-content/uploads/2013/06/neptune-placeholder-48.jpg", caption="No Image Available")
+                        st.image("https://worldfoodtour.co.uk/wp-content/uploads/2013/06/neptune-placeholder-48.jpg", caption=f"{food['food_name']}", link=f"{food['food_link']}")
 
 # Function to create a grid of food cards
 def food_card_grid(filtered_foods):
@@ -93,27 +101,30 @@ def food_card_grid(filtered_foods):
                 food_card(food)
 
 # Function to get and display food nutrition
-def food_nutrition(food_input):
+def food_nutrition(food_input, state_key):
+    # Get the nutrition information for the food item using the API and store it in session state
     if st.button(f"Get Official USDA Nutrition for {food_input.title()}", type="primary", key=f"btn_{food_input}"):
         with st.spinner("Fetching..."):
             api_data = api_food_nutrition(food_input)
-            nutrition_info = get_simplified_nutrition(api_data)
+            st.session_state[state_key] = get_simplified_nutrition(api_data)
 
-            if isinstance(nutrition_info, dict):
-                with st.container(border=True):
-                    st.success(f":material/check_circle: Found {nutrition_info['name'].title()}")
-                    st.subheader(nutrition_info['name'].title())
-                    st.caption("Values per **100g**")
-                    
-                    col1, col2 = st.columns(2)
-                    col1.metric("Calories", f"{int(nutrition_info['Calories'])} kcal")
-                    col2.metric("Protein", f" {nutrition_info['Protein']}g")
-                    col1.metric("Fat", f"{nutrition_info['Fat']}g")
-                    col2.metric("Carbs", f"{nutrition_info['Carbs']}g")
+    if state_key in st.session_state:
+        # Display the nutrition information in a card format
+        nutrition_info = st.session_state[state_key]
+        if isinstance(nutrition_info, dict):
+            with st.container(border=True):
+                st.success(f":material/check_circle: Found {nutrition_info['name'].title()}")
+                st.subheader(nutrition_info['name'].title())
+                st.caption("Values per **100g**")
+                
+                col1, col2 = st.columns(2)
+                col1.metric("Calories", f"{int(nutrition_info['Calories'])} kcal")
+                col2.metric("Protein", f" {nutrition_info['Protein']}g")
+                col1.metric("Fat", f"{nutrition_info['Fat']}g")
+                col2.metric("Carbs", f"{nutrition_info['Carbs']}g")
 
-            else:
-                st.warning(":material/warning: Could not find official data for this item.")
-
+        else:
+            st.warning(":material/warning: Could not find official data for this item.")
 
 # Function to create tabs for the menu and chart    
 def tab_card(filtered_foods):
@@ -135,9 +146,9 @@ def tab_card(filtered_foods):
         col1, col2 = st.columns(2)
         with col1:
             food_input_one = st.text_input("Enter food one:", "Ice Cream")
-            food_nutrition(food_input_one)
+            food_nutrition(food_input_one, 'food_one')
         with col2:
             food_input_two = st.text_input("Enter food two:", "Apple")
-            food_nutrition(food_input_two)
+            food_nutrition(food_input_two, 'food_two')
 
     
