@@ -15,7 +15,7 @@
 It combines:
 - 🔍 Web scraping of restaurant menu data  
 - 🥗 USDA FoodData Central nutritional information  
-- 🤖 Azure OpenAI recipe generation  
+- 🤖 AI recipe generation  
 
 The result is a smart system that transforms restaurant meals into customizable, home-cooked recipes tailored to dietary preferences.
 
