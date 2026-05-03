@@ -42,7 +42,7 @@ def filter_foods(restaurant=None, calories=None, category=None):
     with sqlite3.connect('foods.db') as conn:
         c = conn.cursor()
 
-        query = f"""SELECT food_name, food_calories, food_restaurant, food_logo, food_category, food_link, food_image
+        query = f"""SELECT id, food_name, food_calories, food_restaurant, food_logo, food_category, food_link, food_image
         FROM restaurant_foods
         WHERE 1=1
         """
@@ -68,9 +68,10 @@ def filter_foods(restaurant=None, calories=None, category=None):
 
         # Loop through the rows and create a list of foods based on the query results
         for row in rows:
-                food_name, food_calories, food_restaurant, food_logo, food_category, food_link, food_image = row
+                food_id, food_name, food_calories, food_restaurant, food_logo, food_category, food_link, food_image = row
 
                 filter_foods.append({
+                        "id": food_id,
                         "food_name": food_name,
                         "food_calories": food_calories,
                         "food_restaurant": food_restaurant,
