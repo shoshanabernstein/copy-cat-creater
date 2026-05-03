@@ -3,9 +3,10 @@ import app
 import streamlit as st
 
 st.set_page_config(
-        page_title="Copy-Cat Creater",
+        page_title="Copy-Cat Creator",
         page_icon=":material/menu_book_2:",
         layout="wide",
+        
     )
 
 st.title("_Copy-Cat_ :red[Creater]", text_alignment="center")

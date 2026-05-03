@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
+@st.cache_data
 # Function to scrape the menu from the provided URL and return the scraped data
 def scrape_restaurant(html):
     """Scrapes the menu from the provided URL and returns the scraped data"""
@@ -35,6 +36,7 @@ def scrape_restaurant(html):
 
     return restaurant_foods
 
+@st.cache_data
 # Function to scrape the food image from the provided URL and return the scraped image URL
 def scrape_food_image(html):
     """Scrapes the food items picture"""

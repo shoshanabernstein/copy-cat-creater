@@ -12,7 +12,7 @@ client = AzureOpenAI(
 )
 
 # Function to recreate a copycat recipe using Azure OpenAI
-def recreate_recipe_ai_bot(food):
+def recreate_recipe_ai_bot(food, context=""):
     prompt = f"""
     You are an expert culinary chemist specializing in restaurant "copy-cat" recreations. 
     Your goal is to provide a home-cook recipe for the {food['food_name']} from {food['food_restaurant']}.
@@ -24,9 +24,16 @@ def recreate_recipe_ai_bot(food):
    - Use ### Headings for 'Ingredients' and 'Instructions'.
    - Use bold text for key techniques (e.g., **flash-fry**, **marinate for 2 hours**).
    - Include a "Chef's Secret" note at the end explaining one specific trick to make it taste exactly like the original.
-
-    Provide the recipe now:
     """
+    if context:
+        prompt += f"""
+        Make sure to follow these specifications: {context} 
+        Provide the recipe now:
+        """
+    else:
+        prompt += f"""
+        Provide the recipe now:
+        """
     response = client.chat.completions.create(
         model=st.secrets["AZURE_OPENAI_MODEL"],
         messages=[{"role": "user", "content": prompt}],
