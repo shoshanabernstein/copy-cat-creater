@@ -1,6 +1,6 @@
 """Script to load the database with restaurant nutrition data."""
 from database import (create_database, load_database, 
-                      scrape_restaurant, delete_by_id)
+                      scrape_restaurant, delete_by_id, delete_duplicates)
 
 if __name__=="__main__":
     create_database()
@@ -25,3 +25,6 @@ if __name__=="__main__":
     load_database(chick_fil_a)
     load_database(subway)
     load_database(taco_bell)
+
+    # delete_duplicates()
+

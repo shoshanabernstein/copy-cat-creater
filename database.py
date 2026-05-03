@@ -142,3 +142,23 @@ def delete_by_id(food_id):
             conn.commit()
     except sqlite3.Error as e:
         return
+
+# Function to delete duplicate foods from the database
+def delete_duplicates():
+    """Deletes duplicate foods from database"""
+    try:
+        with(sqlite3.connect('foods.db')) as conn:
+            c = conn.cursor()
+            c.execute("""
+                DELETE FROM restaurant_foods
+                WHERE id NOT IN (
+                    SELECT MIN(id)
+                    FROM restaurant_foods
+                    GROUP BY food_name, food_restaurant, food_category
+                      )
+                      """)
+            conn.commit()
+            print("Duplicates deleted successfully.")
+    except sqlite3.Error as e:
+        return
+

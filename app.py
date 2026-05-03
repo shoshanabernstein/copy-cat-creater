@@ -69,7 +69,7 @@ def food_card(food):
                 context = st.text_input("Specifications (optional):", key=f"spec_{food['id']}")
                 st.space()
                 # Button to generate the recipe using Azure OpenAI
-                if st.button(f"Generate **{food['food_name']}** Recipe", type="primary", use_container_width=True, key=food['id']):
+                if st.button(f"Generate **{food['food_name']}** Recipe", type="primary", use_container_width=True, key=f"btn_{food['id']}"):
                     with st.spinner("Analyzing Ingredients..."):
                         recipe = recreate_recipe_ai_bot(food, context)
                         st.space()
